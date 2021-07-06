@@ -14,7 +14,7 @@ declare(strict_types=1);
  * @link https://medoo.in
  */
 
-namespace Medoo;
+namespace lyhiving;
 
 use PDO;
 use Exception;
