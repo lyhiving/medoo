@@ -601,7 +601,7 @@ class Medoo
         );
 
         foreach ($map as $key => $value) {
-            if ($value[1] === PDO::PARAM_STR) {
+            if ($value[1] === PDO::PARAM_STR && !is_numeric($value[0])) {//修正$value[0] 为float的情况
                 $replace = $this->quote($value[0]);
             } elseif ($value[1] === PDO::PARAM_NULL) {
                 $replace = 'NULL';
@@ -691,7 +691,7 @@ class Medoo
      * @param string $string
      * @return string
      */
-    public function quote($string): string
+    public function quote(string $string): string
     {
         if ($this->type === 'mysql') {
             return "'" . preg_replace(['/([\'"])/', '/(\\\\\\\")/'], ["\\\\\${1}", '\\\${1}'], $string) . "'";
@@ -1917,7 +1917,6 @@ class Medoo
 
             $this->columnMap($columns, $columnMap, true);
             $this->dataMap($data[0], $columns, $columnMap, $currentStack, true, $result);
-
             if ($isSingle) {
                 return $result[0][$columnMap[$column][0]];
             }
