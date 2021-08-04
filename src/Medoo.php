@@ -565,6 +565,22 @@ class Medoo
 
         $errorInfo = $statement->errorInfo();
 
+        //FIX mssql 07002 error START
+        if ($errorInfo[0] == '07002') {
+            $sql = $this->last();
+            if ($sql && $map) {
+                $this->error_retry = true;
+                $statement = $this->exec($sql);
+                if ($statement) {
+                    $errorInfo = $statement->errorInfo();
+                    if ($errorInfo[0] == '00000') {
+                        return $statement;
+                    }
+                }
+            }
+        }
+        //FIX mssql 07002 error END
+
         if ($errorInfo[0] !== '00000') {
             $this->errorInfo = $errorInfo;
             $this->error = $errorInfo[2];
