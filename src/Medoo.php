@@ -551,7 +551,7 @@ class Medoo
         }
 
         foreach ($map as $key => $value) {
-            $statement->bindValue($key, $value[0], $value[1]);
+            @$statement->bindValue($key, $value[0], $value[1]);
         }
 
         if (is_callable($callback)) {
@@ -560,7 +560,7 @@ class Medoo
             $execute = $statement->execute();
             $this->pdo->commit();
         } else {
-            $execute = $statement->execute();
+            $execute = @$statement->execute();
         }
 
         $errorInfo = $statement->errorInfo();
